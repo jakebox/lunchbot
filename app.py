@@ -29,8 +29,11 @@ def sms():
 
     if message_body in bot.days_of_the_week: # If the message is something we know how to do
         todays_menu = bot.get_day(message_body)
-    elif today in bot.days_of_the_week:
-        todays_menu = bot.get_day(today)
+    elif today[0] in bot.days_of_the_week or today[0:1] in bot.days_of_the_week:
+        if today == "Thursday":
+            todays_menu = bot.get_day("Th")
+        else:
+            todays_menu = bot.get_day(today[0])
     else:
         todays_menu = bot.get_day("M")
     resp.message(todays_menu + '\n \nSponsored by CTC/Student Government & FTC Robotics')
