@@ -1,0 +1,6 @@
+* Lunchbot
+** Usage
+You can request a specific day's lunch menu by sending the name of the day of the week (e.g. "Thursday," case insensitive). If you send anything other than a day of the week, today's lunch menu (or Monday's, if it is the weekend) will be send back to you.
+** Pricing
++ 0.0075 per text
++ 
