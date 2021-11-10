@@ -2,21 +2,14 @@ from flask import Flask, request
 from twilio import twiml
 from twilio.twiml.messaging_response import Message, MessagingResponse
 
-from lunch_bot_getter import Lunchbot
-from url_getter import Menu
-
+import sys
 from datetime import date
 
+from lunch_parser import read_menu
+
+days_of_the_week = ["M", "T", "W", "Th", "F"]
+
 app = Flask(__name__)
-
-menu = Menu()
-
-url = menu.get_pdf_url()
-
-bot = Lunchbot(url)
-
-# url = 'https://fwparker.myschoolapp.com/ftpimages/1048/download/download_6209679.pdf'
-
 
 today = date.today().strftime('%A')
 
@@ -27,22 +20,31 @@ def sms():
     message_body = request.form['Body'].title().strip()
     resp = MessagingResponse()
 
-    if message_body in bot.days_of_the_week: # If the message is something we know how to do
-        todays_menu = bot.get_day(message_body)
-    elif today[0] in bot.days_of_the_week or today[0:1] in bot.days_of_the_week:
+    if message_body in days_of_the_week: # If the message is something we know how to do
+        todays_menu = read_menu(message_body)
+    elif today[0] in days_of_the_week or today[0:1] in days_of_the_week: # Tuesday and Thursday
         if today == "Thursday":
-            todays_menu = bot.get_day("Th")
-        else:
-            todays_menu = bot.get_day(today[0])
+            todays_menu = read_menu("Th")
+        else: # If someone sends something random, give them today's menu (or Tuesday if it's Thu... TODO)
+            todays_menu = read_menu(today[0])
     else:
-        todays_menu = bot.get_day("M")
+        todays_menu = read_menu("M")
     resp.message(todays_menu + '\n \nSponsored by CTC/Student Government & FTC Robotics')
 
     return str(resp)
 
-@app.route('/jake', methods=['POST'])
-def jake():
-    return "<h1>Welcome to our server !!</h1>"
-
 if __name__ == '__main__':
-    app.run()
+    # app.run()
+    message_body = sys.argv[1]
+
+    if message_body in days_of_the_week: # If the message is something we know how to do
+        todays_menu = read_menu(message_body)
+    elif today[0] in days_of_the_week or today[0:1] in days_of_the_week: # Tuesday and Thursday
+        if today == "Thursday":
+            todays_menu = read_menu("Th")
+        else:
+            todays_menu = read_menu(today[0])
+    else:
+        todays_menu = read_menu("M")
+    print(todays_menu + '\n \nSponsored by CTC/Student Government & FTC Robotics')
+    

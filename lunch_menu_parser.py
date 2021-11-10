@@ -1,7 +1,7 @@
 ###
-###  Francis Parker Lunch menu downloader and parser, improved
-###  By Jake Boxerman
-###  Original Sep. 2019, improved Oct. 2019, class-ified Nov 2021
+###  FWP lunch menu parser
+###  By Jake B
+###  Original Sep 2019, improved Oct 2019, improved & class-ified Nov 2021
 ###
 
 import pdftotext
@@ -20,7 +20,6 @@ class Lunchbot:
 
         # Creating dictionary to hold the location of each day's meal list in the list
         self.dict = {"Monday:": 0, "Tuesday:": 0, "Wednesday:": 0, "Thursday:": 0, "Friday:": 0}
-        self.days_of_the_week = ["M", "T", "W", "Th", "F"]
 
         self.parse_pdf()
 
@@ -58,6 +57,8 @@ class Lunchbot:
         return ' '.join(self.menu[self.dict.get(day + ":"):end_day_pos])
 
 if __name__ == '__main__':
+
+    # This method is outdated, use lunch_parser cached menus
 
     day_requested = "F"
     url = 'https://fwparker.myschoolapp.com/ftpimages/1048/download/download_6209679.pdf'
