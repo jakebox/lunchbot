@@ -40,5 +40,9 @@ def sms():
 
     return str(resp)
 
+@app.route('/jake', methods=['POST'])
+def jake():
+    return "<h1>Welcome to our server !!</h1>"
+
 if __name__ == '__main__':
     app.run()
