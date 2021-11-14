@@ -20,8 +20,10 @@ class Lunchbot:
 
         # Creating dictionary to hold the location of each day's meal list in the list
         self.dict = {"Monday:": 0, "Tuesday:": 0, "Wednesday:": 0, "Thursday:": 0, "Friday:": 0}
+        self.days_of_the_week = ["M", "T", "W", "Th", "F"]
 
         self.parse_pdf()
+
 
     def parse_pdf(self):
         # Turning the string into list (each word is its own element)
@@ -35,6 +37,7 @@ class Lunchbot:
         # Finding and setting the location of each day's meal list beginning
         for day, spot in self.dict.items():
             self.dict[day] = self.menu.index(day)
+
 
     def get_day(self, day):
         # Finding and setting the end of each day's meal list. Could probably be shorter.
@@ -55,6 +58,7 @@ class Lunchbot:
             end_day_pos = len(self.menu)
 
         return ' '.join(self.menu[self.dict.get(day + ":"):end_day_pos])
+
 
 if __name__ == '__main__':
 
