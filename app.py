@@ -28,7 +28,7 @@ def sms():
     message_body = request.form['Body'].title().strip()
     resp = MessagingResponse()
 
-    resp.message(read_parsed_text_menu(True))
+    resp.message(read_parsed_text_menu())
 
     return str(resp)
 
