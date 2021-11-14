@@ -3,6 +3,7 @@ from twilio import twiml
 from twilio.twiml.messaging_response import Message, MessagingResponse
 
 import sys
+import requests
 from datetime import date
 
 # from lunch_parser import read_parsed_text_menu
