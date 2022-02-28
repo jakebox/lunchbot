@@ -20,7 +20,7 @@ class Lunchbot:
 
         # Creating dictionary to hold the location of each day's meal list in the list
         self.dict = {"Monday:": 0, "Tuesday:": 0, "Wednesday:": 0, "Thursday:": 0, "Friday:": 0}
-        self.days_of_the_week = ["M", "T", "W", "Th", "F"]
+        self.days_of_the_week = ["Mon", "Tues", "Wednes", "Thurs", "Fri"]
 
         self.parse_pdf()
 
@@ -33,6 +33,11 @@ class Lunchbot:
         for index, item in enumerate(self.menu):
             if item == "\uf0b7": self.menu.remove(item)
             if item == "•": self.menu[index] = "\n •"
+            # These two lines make sure that minor typos in the day make it thru
+            for day in self.days_of_the_week:
+                if day in item: self.menu[index] = day + "day:"
+
+        # self.menu[self.menu.index('Tuesday:3/1')] = "Tuesday:" # Stupid fix for a typo
 
         # Finding and setting the location of each day's meal list beginning
         for day, spot in self.dict.items():
@@ -64,7 +69,7 @@ if __name__ == '__main__':
 
     # This method is outdated, use lunch_parser cached menus
 
-    day_requested = "F"
+    day_requested = "T"
     url = 'https://fwparker.myschoolapp.com/ftpimages/1048/download/download_6209679.pdf'
 
     bot = Lunchbot(url)

@@ -5,7 +5,7 @@ from lunch_menu_parser import Lunchbot
 from lunch_menu_url_scraper import Menu
 
 from datetime import date
-import os
+import os, sys
 import requests
 
 days_of_the_week = ["M", "T", "W", "Th", "F"]
@@ -41,7 +41,12 @@ def read_parsed_text_menu(remote=False): # Get contents of menu file
 
 
 if __name__ == '__main__':
-    # print("Scraping, parsing, and saving menu.")
-    # get_menus()
-    print("Reading from remote url", remote_menu_url + "\n")
-    print(read_parsed_text_menu(True))
+
+    if len(sys.argv) > 1 and sys.argv[1] == 'remote':
+        print("Reading from remote url", remote_menu_url + "\n")
+        print(read_parsed_text_menu(True))
+
+    else:
+        print("Scraping, parsing, and saving menu.")
+        get_menus()
+
