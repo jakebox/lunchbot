@@ -1,12 +1,13 @@
 from flask import Flask, request
-from twilio import twiml
-from twilio.twiml.messaging_response import Message, MessagingResponse
 
 import sys
 import requests
 from datetime import date
 
-# from lunch_parser import read_parsed_text_menu
+import os
+
+telnyx_api_key = "KEY017D6900D5CE1F9E3A37F3C50637B764_327Pr2tHI9UFyVlY7Kfv9X"
+telnyx_number = "+12182203065"
 
 days_of_the_week = ["M", "T", "W", "Th", "F"]
 
@@ -16,35 +17,32 @@ today = date.today().strftime('%A')
 
 remote_menu_url = "https://fwp-lunchbot.s3.us-east-2.amazonaws.com/menus/menu.txt"
 
+def send_message(number, message):
+    # message="Lunch menu here:"
+    command = "curl -X POST \\\n  --header \"Content-Type: application/json\" \\\n  --header \"Authorization: Bearer " + telnyx_api_key + "\" \\\n  --data \'{\n    \"from\": \"" + telnyx_number + "\",\n    \"to\": \"" + number + "\",\n    \"text\": \"" + message + "\"\n  }\' \\\n  https://api.telnyx.com/v2/messages\n"
+    os.system(command)
+    
+
 def read_parsed_text_menu(): # Get contents of menu file
     "Read contents of menu file."
     remote_menu = requests.get(remote_menu_url)
     remote_menu.encoding = remote_menu.apparent_encoding
-    return(remote_menu.text.strip())
+    return(remote_menu.text.strip().replace("\n", "\\n"))
 
-@app.route('/sms', methods=['POST'])
-def sms():
+@app.route('/webhooks', methods=['POST'])
+def webhooks():
+    body = request.json
+    texter_number = body['data']['payload']['from']['phone_number']
 
-    number = request.form['From']
-    message_body = request.form['Body'].title().strip()
-    resp = MessagingResponse()
+    if texter_number != "+12182203065":
+        print(texter_number)
+        print("Text recieved from: ", texter_number)
 
-    resp.message(read_parsed_text_menu())
+        send_message(texter_number, read_parsed_text_menu().replace("\n", "\\n"))
 
-    return str(resp)
+    return '', 200
 
 if __name__ == '__main__':
-    app.run()
-    # message_body = sys.argv[1]
-
-    # if message_body in days_of_the_week: # If the message is something we know how to do
-    #     todays_menu = read_menu(message_body)
-    # elif today[0] in days_of_the_week or today[0:1] in days_of_the_week: # Tuesday and Thursday
-    #     if today == "Thursday":
-    #         todays_menu = read_menu("Th")
-    #     else:
-    #         todays_menu = read_menu(today[0])
-    # else:
-    #     todays_menu = read_menu("M")
-    # print(todays_menu + '\n \nSponsored by CTC/Student Government & FTC Robotics')
-    
+    app.run(port=8000)
+    # print(repr(read_parsed_text_menu().replace("\n", "\\n")))
+    # print(read_parsed_text_menu())

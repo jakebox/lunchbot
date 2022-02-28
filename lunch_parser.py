@@ -9,7 +9,7 @@ import os
 import requests
 
 days_of_the_week = ["M", "T", "W", "Th", "F"]
-local_menu_file = "menu.txt"
+local_menu_file = "menus/menu.txt"
 
 def get_menus():
     "Take menu from Internet and save as plaintext file menu.txt."
@@ -41,7 +41,7 @@ def read_parsed_text_menu(remote=False): # Get contents of menu file
 
 
 if __name__ == '__main__':
-    # print("Scraping, parsing, and saving menu.")
-    # get_menus()
-    print("Reading from remote url", remote_menu_url + "\n")
-    print(read_parsed_text_menu(True))
+    print("Scraping, parsing, and saving menu.")
+    get_menus()
+    # print("Reading from remote url", remote_menu_url + "\n")
+    # print(read_parsed_text_menu(True))
