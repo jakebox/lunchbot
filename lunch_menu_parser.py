@@ -33,9 +33,6 @@ class Lunchbot:
         for index, item in enumerate(self.menu):
             if item == "\uf0b7": self.menu.remove(item)
             if item == "•": self.menu[index] = "\n •"
-            # These two lines make sure that minor typos in the day make it thru
-            for day in self.days_of_the_week:
-                if day in item: self.menu[index] = day + "day:"
 
         # self.menu[self.menu.index('Tuesday:3/1')] = "Tuesday:" # Stupid fix for a typo
 
